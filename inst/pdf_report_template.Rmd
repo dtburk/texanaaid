@@ -1,0 +1,86 @@
+---
+title: "`r report_title`"
+author: "Derek Burk"
+date: "`r format(Sys.Date(), '%B %e, %Y')`"
+output: 
+    pdf_document:
+        fig_caption: yes
+classoption: landscape
+---
+
+
+```{r echo=FALSE, fig.width=7, fig.cap=sprintf("Number of reports by geopolitical\nbody and time period (n=%d)", num_reports)}
+# Make barplot showing distribution of reports by region and time period
+
+out_tab <- table(full_report_meta[ , .(geog, era)])
+
+par(family="serif", mar=c(2, 2, 2, 2))
+
+barplot(out_tab, beside=FALSE, col=c("navy", "dodgerblue", "red"),
+        border=FALSE, legend=TRUE, args.legend=list(x=2, y=24, bty="n", cex=1.5, border=FALSE),
+        main=NULL)
+```
+
+```{r echo=FALSE, results='asis'}
+kable(out_tab, caption=sprintf("Number of reports by geopolitical body and time period (n=%d)", num_reports))
+```
+
+
+```{r echo=FALSE}
+# Table 2
+kable(era_and_geog_tab, caption="Numeric indices of most prevalent topics, by geopolitical body and time period")
+```
+
+\pagebreak
+
+
+```{r echo=FALSE}
+
+kable(100*all_wts, caption="Average prevalence weights of each topic across all time periods, by geopolitical body", digits=0, row.names=TRUE)
+
+```
+
+\pagebreak
+
+```{r echo=FALSE}
+kable(100*all_geogs_mtrx, caption="Average prevalence weights of all topics, all geopolitical bodies", digits=0, row.names=TRUE)
+
+```
+
+\pagebreak
+
+```{r echo=FALSE, results='asis'}
+for(i in seq_along(wts_by_geog)) {
+    w <- wts_by_geog[[i]]
+    g <- names(wts_by_geog)[i]
+    print(
+        kable(
+            100 * w, caption = sprintf("Average prevalence weights of all topics, %s", g), digits = 0, row.names = TRUE
+        )
+    )
+}
+
+# kable(100*eu_wts, caption="Average prevalence weights of all topics, EU", digits=0, row.names=TRUE)
+```
+
+
+```{r echo=FALSE}
+# kable(100*un_wts, caption="Average prevalence weights of all topics, UN", digits=0, row.names=TRUE)
+```
+
+
+```{r echo=FALSE}
+# kable(100*us_wts, caption="Average prevalence weights of all topics, US", digits=0, row.names=TRUE)
+```
+
+\pagebreak
+
+```{r echo=FALSE, results="asis"}
+
+for(i in 1:n_word_tables) {
+    start <- 1 + (i-1)*topics_per_table
+    stop <- min(i*topics_per_table, n_topics)
+    print(kable(all_top_frex[ , start:stop], row.names=TRUE, caption=sprintf("Most characteristic words for topics %d-%d", start, stop)))
+    if(i < n_word_tables) cat("\n\n\\pagebreak\n\n")
+}
+```
