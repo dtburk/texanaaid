@@ -27,3 +27,5 @@ You can install texanaaid from [GitHub](https://github.com/) with:
 # install.packages("remotes")
 remotes::install_github("dtburk/texanaaid")
 ```
+Note: you may need to update to the latest version of R for installation to 
+succeed.
