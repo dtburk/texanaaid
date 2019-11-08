@@ -1,5 +1,5 @@
 #' Make text table
-#' 
+#'
 #' Make a nicely-formatted plain text table.
 #' @param col_list List of vectors containing the data for the columns of the table to be output.
 #' @param headers Character vector of column headers.
@@ -8,7 +8,6 @@
 #' @export
 
 make_text_table <- function(col_list, headers, which_pretty=NULL, digits=rep(0, length(col_list))) {
-    require(stringr)
     for(i in seq_along(col_list)) {
         x <- col_list[[i]]
         if(is.numeric(x)) {
@@ -19,7 +18,7 @@ make_text_table <- function(col_list, headers, which_pretty=NULL, digits=rep(0, 
         }
         pad <- max(c(nchar(x), nchar(headers[i])))
         x <- c(headers[i], str_dup("-", pad), as.character(x))
-        x <- str_pad(x, width=pad)
+        x <- stringr::str_pad(x, width=pad)
         col_list[[i]] <- x
         rm(x, pad)
     }

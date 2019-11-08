@@ -7,13 +7,16 @@
 get_common_words(prob_mtrx, group_num, n, group_membership = NULL)
 }
 \arguments{
-\item{prob_mtrx}{A matrix with (named) columns for words, and rows for either documents or document groups. If each row represents a document, \code{group_membership} must be provided.}
+\item{prob_mtrx}{A matrix with (named) columns for words, and rows for either
+documents or document groups. If each row represents a document,
+\code{group_membership} must be provided.}
 
 \item{group_num}{An integer corresponding to the document group of interest.}
 
 \item{n}{An integer specifying how many words should be returned.}
 
-\item{group_membership}{An integer vector specifying the group membership of documents in \code{prob_mtrx}.}
+\item{group_membership}{An integer vector specifying the group membership of
+documents in \code{prob_mtrx}.}
 }
 \description{
 Get the most frequent words in a group of documents.

@@ -1,21 +1,19 @@
 #' Make topic network graph
-#' 
+#'
 #' Make topic network graph from STM results.
 #' @param stm_results Path to directory containing STM results. This directory should have the same name as the .Rdata file containing the results, and the same name as the results object contained in that file.
 #' @param stm_input_file Path to .Rdata file containing R object used as input for the STM analysis. This object should be named "stm_input".
 #' @param output_file Path to .png file in which to save network graph.
 #' @export
 
-make_topic_network_graph <- function(stm_results, stm_input_file, 
+make_topic_network_graph <- function(stm_results, stm_input_file,
                                      output_file=file.path(stm_results, "topic_network.png")) {
-    require(stm)
-    require(igraph)
-    
+
     load(stm_input_file)
 
     load(file.path(stm_results, paste0(basename(stm_results), ".Rdata")))
     k <- ncol(get(stm_results)$theta)
-    vertex_labels <- labelTopics(get(stm_results), n=2)$frex
+    vertex_labels <- stm::labelTopics(get(stm_results), n=2)$frex
     vertex_labels <- paste(1:as.integer(k), vertex_labels[,1], vertex_labels[,2], sep="\n")
     vertex_sizes <- apply(get(stm_results)$theta, 2, mean)*20*as.integer(k)
     topics_by_geog <- get_topic_prevalence_by_covariate(get(stm_results), by_what="geog", stm_input$meta)
@@ -33,13 +31,19 @@ make_topic_network_graph <- function(stm_results, stm_input_file,
     color_by_topic[split_topics] <- split_colors
     #label_color_by_topic <- sapply(color_by_topic, function(x) complementary(x, plot=FALSE)[2])
     #label_color_by_topic[color_by_topic=="red"] <- "black"
-    topic_corr <- topicCorr(get(stm_results), method="simple", cutoff=0.01)
-    edge_widths <- 100*E(graph_from_adjacency_matrix(topic_corr$poscor, mode="undirected", 
-                                                     weighted=TRUE, diag=FALSE))$weight
+    topic_corr <- stm::topicCorr(get(stm_results), method="simple", cutoff=0.01)
+    edge_widths <- 100*igraph::E(
+        igraph::graph_from_adjacency_matrix(
+            topic_corr$poscor,
+            mode="undirected",
+            weighted=TRUE,
+            diag=FALSE
+        )
+    )$weight
     png(filename = output_file, height=1200, width=1200)
-    plot(topic_corr, vlabels=vertex_labels, vertex.label.cex=1.5, 
-         vertex.color = color_by_topic, vertex.label.color="black", 
-         vertex.size=vertex_sizes, vertex.frame.color=NA, edge.width=edge_widths, edge.lty=1, 
+    stm::plot.topicCorr(topic_corr, vlabels=vertex_labels, vertex.label.cex=1.5,
+         vertex.color = color_by_topic, vertex.label.color="black",
+         vertex.size=vertex_sizes, vertex.frame.color=NA, edge.width=edge_widths, edge.lty=1,
          edge.color="grey")
     dev.off()
 }
