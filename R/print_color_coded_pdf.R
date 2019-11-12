@@ -35,7 +35,7 @@ print_color_coded_pdf <- function(raw_text, frex, filename, stemmed=TRUE, colors
 
     process <- function(word) {
         out <- stringr::str_to_lower(remove_punctuation(word))
-        if(stemmed) return(wordStem(out))
+        if(stemmed) return(SnowballC::wordStem(out))
         else return(out)
     }
 
