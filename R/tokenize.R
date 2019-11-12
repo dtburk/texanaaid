@@ -7,7 +7,7 @@
 #' @export
 #' @examples
 #' docs <- c("What are you doing down there, crashy?", "I'm real good at lying to Lois.")
-#' words <- convert_to_list_of_word_vectors(docs)
+#' words <- tokenize(docs)
 
 tokenize <- function(x) {
     if(inherits(x, "TextDocument")) x <- x$content

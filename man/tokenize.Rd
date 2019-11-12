@@ -17,6 +17,6 @@ This function takes a Corpus or vector of documents and returns a list of charac
 }
 \examples{
 docs <- c("What are you doing down there, crashy?", "I'm real good at lying to Lois.")
-words <- convert_to_list_of_word_vectors(docs)
+words <- tokenize(docs)
 }
 \keyword{text}
