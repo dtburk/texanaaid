@@ -92,7 +92,6 @@ create_topic_model_report <- function(model,
     dev.off()
   }
 
-  tmp <- labelTopics(m, n=150)
   summary_frex_file <- file.path(report_dir, "summary_frex.csv")
   summary_prob_file <- file.path(report_dir, "summary_prob.csv")
   make_summary_csv(m, summary_frex_file, type="frex")
